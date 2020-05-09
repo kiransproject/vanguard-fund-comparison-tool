@@ -9,8 +9,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 chromedriver = "/home/K/git_projects/vanguard_fund_comparison/chromedriver"
 
-fund_list = []
-#fund_url="https://www.vanguardinvestor.co.uk/investments/vanguard-ftse-global-all-cap-index-fund-gbp-accumulation-shares/portfolio-data"
 
 def create_driver():
     chrome_options = webdriver.ChromeOptions()
@@ -24,6 +22,7 @@ def terminate(driver):
 
 def compare_funds(fund_url):
     try:
+        fund_list = []
         print('Creating Chrome Driver ...')
         driver = create_driver()
         print('Loading Fund ...')
