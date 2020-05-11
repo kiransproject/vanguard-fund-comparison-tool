@@ -9,6 +9,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 chromedriver = "/home/K/git_projects/vanguard_fund_comparison/chromedriver"
 
+fund1_url="https://www.vanguardinvestor.co.uk/investments/vanguard-ftse-global-all-cap-index-fund-gbp-accumulation-shares/portfolio-data?intcmpgn=equityglobal_ftseglobalallcapindexfund_fund_link"
+fund2_url="https://www.vanguardinvestor.co.uk/investments/vanguard-us-equity-index-fund-accumulation-shares/portfolio-data?intcmpgn=equityusa_usequityindexfund_fund_link"
 
 def create_driver():
     chrome_options = webdriver.ChromeOptions()
@@ -19,13 +21,17 @@ def create_driver():
 def terminate(driver):
     driver.quit()
 
+def get_fund_name(url):
+    name = re.compile('vanguard-.*(.+?(?=/))')
+    result = name.search(url)
+    return result.group(0).upper()
 
 def compare_funds(fund_url):
     try:
         fund_list = []
         print('Creating Chrome Driver ...')
         driver = create_driver()
-        print('Loading Fund ...')
+        print('Loading Fund:', get_fund_name(fund_url))
         driver.get(fund_url)
         time.sleep(3)
         print('Determining number of stock in the fund ...')
@@ -42,7 +48,6 @@ def compare_funds(fund_url):
                 if ( (len(fund_list) + 10) < no_of_funds ):
                         print ('Next Page, total recorded ', len(fund_list), 'stocks' )
                         driver.execute_script("arguments[0].click();", next_page)        
-        print(fund_list)
         return fund_list
         terminate(driver)
     except Exception as e:
@@ -50,7 +55,9 @@ def compare_funds(fund_url):
         raise ValueError(str(e))
 
 if __name__ == "__main__":
-    fund2=compare_funds("https://www.vanguardinvestor.co.uk/investments/vanguard-us-equity-index-fund-accumulation-shares/portfolio-data")
-    fund1=compare_funds("https://www.vanguardinvestor.co.uk/investments/vanguard-ftse-global-all-cap-index-fund-gbp-accumulation-shares/portfolio-data")
+    fund1_name=(get_fund_name(fund1_url))
+    fund2_name=(get_fund_name(fund2_url))
+    fund2=compare_funds(fund2_url)
+    fund1=compare_funds(fund1_url)
     duplicates=set(fund1).intersection(fund2)
-    print(len(duplicates), ' overlapping companies between the two funds, equating to ', (((len(duplicates))/(len(fund1)))*100), '% overlap for fund 1 and ', (((len(duplicates))/(len(fund1)))*100), '% overlap for fund2')
+    print(len(duplicates), ' overlapping companies between ', fund1_name,' and ', fund2_name, '. Equating to ', (((len(duplicates))/(len(fund1)))*100), '% overlap for ', fund1_name,' and ', (((len(duplicates))/(len(fund2)))*100), '% overlap for ', fund2_name)
