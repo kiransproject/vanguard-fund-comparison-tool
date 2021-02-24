@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 chromedriver = "/home/K/git_projects/vanguard_fund_comparison/chromedriver"
 
-fund1_url="https://www.vanguardinvestor.co.uk/investments/vanguard-ftse-global-all-cap-index-fund-gbp-accumulation-shares/portfolio-data?intcmpgn=equityglobal_ftseglobalallcapindexfund_fund_link"
+fund1_url="https://www.vanguardinvestor.co.uk/investments/vanguard-ftse-developed-europe-ex-uk-equity-index-fund-gbp-acc/portfolio-data?intcmpgn=equityeurope_ftsedevelopedeuropeexukequityindexfund_fund_link"
 fund2_url="https://www.vanguardinvestor.co.uk/investments/vanguard-us-equity-index-fund-accumulation-shares/portfolio-data?intcmpgn=equityusa_usequityindexfund_fund_link"
 
 def create_driver():
